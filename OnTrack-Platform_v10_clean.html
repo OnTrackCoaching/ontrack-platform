@@ -2416,6 +2416,7 @@ function CoachDashboard({user,showToast}){
   },[roster,selectedStudent?.id]);
 
   return(
+    <>
     <div className="app-shell">
       <div className="top-bar">
         <div className="top-brand">
@@ -2648,28 +2649,12 @@ function CoachDashboard({user,showToast}){
                           <div style={{display:"flex",gap:8,marginTop:14,flexWrap:"wrap"}}>
                             <button className="btn btn-ghost btn-sm" onClick={()=>{
                               const LABELS={sessionGoals:"🎯 SESSION GOALS",preSessionCheckin:"💭 PRE-SESSION CHECK-IN",keyDiscussionPoints:"🗣️ KEY DISCUSSION POINTS",strategiesIdentified:"🔧 STRATEGIES IDENTIFIED",studentInsights:"💡 STUDENT INSIGHTS",barriersAddressed:"🚧 BARRIERS ADDRESSED",efFocusAreas:"🧠 EXECUTIVE FUNCTION AREAS",actionSteps:"✅ ACTION STEPS",coachObservations:"🔒 COACH OBSERVATIONS",sessionOutcomes:"📈 OUTCOMES",nextSessionFocus:"🔭 NEXT SESSION FOCUS",referrals:"🏥 REFERRALS",coachingCompetencies:"🎓 ICF COMPETENCIES"};
-                              const txt=`ONTRACK AT SU — SESSION NOTE
-Student: ${studentName}
-Date: ${sessionDate}${sessionNum}
-
-`+Object.entries(LABELS).map(([k,l])=>n.sessionData?.[k]?`${l}
-${n.sessionData[k]}
-`:"").filter(Boolean).join("
-");
+                              const txt="ONTRACK AT SU — SESSION NOTE\nStudent: "+studentName+"\nDate: "+sessionDate+sessionNum+"\n\n"+Object.entries(LABELS).map(([k,l])=>n.sessionData?.[k]?l+"\n"+n.sessionData[k]+"\n":"").filter(Boolean).join("\n");
                               navigator.clipboard?.writeText(txt).then(()=>showToast("📋 Note copied!")).catch(()=>showToast("Copy unavailable"));
                             }}>📋 Copy Note</button>
                             <button className="btn btn-blue btn-sm" onClick={()=>{
                               const LABELS={sessionGoals:"🎯 SESSION GOALS",preSessionCheckin:"💭 PRE-SESSION CHECK-IN",keyDiscussionPoints:"🗣️ KEY DISCUSSION POINTS",strategiesIdentified:"🔧 STRATEGIES IDENTIFIED",studentInsights:"💡 STUDENT INSIGHTS",barriersAddressed:"🚧 BARRIERS ADDRESSED",efFocusAreas:"🧠 EXECUTIVE FUNCTION AREAS",actionSteps:"✅ ACTION STEPS",coachObservations:"🔒 COACH OBSERVATIONS (Confidential)",sessionOutcomes:"📈 OUTCOMES",nextSessionFocus:"🔭 NEXT SESSION FOCUS",referrals:"🏥 REFERRALS",coachingCompetencies:"🎓 ICF COMPETENCIES"};
-                              const body=`ONTRACK AT SU — COACHING SESSION NOTE
-${"=".repeat(50)}
-Coach: ${COACH_NAME}, ${COACH_TITLE}
-Student: ${studentName}
-Date: ${sessionDate}${sessionNum} · ${dur?dur+" min · ":""}${mode}
-${"─".repeat(50)}
-`+Object.entries(LABELS).map(([k,l])=>n.sessionData?.[k]?`
-${l}
-${n.sessionData[k]}
-`:"").filter(Boolean).join("");
+                              const body="ONTRACK AT SU — COACHING SESSION NOTE\n"+"=".repeat(50)+"\nCoach: "+COACH_NAME+", "+COACH_TITLE+"\nStudent: "+studentName+"\nDate: "+sessionDate+sessionNum+" · "+(dur?dur+" min · ":"")+mode+"\n"+"─".repeat(50)+"\n"+Object.entries(LABELS).map(([k,l])=>n.sessionData?.[k]?"\n"+l+"\n"+n.sessionData[k]+"\n":"").filter(Boolean).join("");
                               const sub=encodeURIComponent(`OnTrack Session Note — ${studentName} — ${n.sessionDate||""}`);
                               window.open(`mailto:${COACH_EMAIL}?subject=${sub}&body=${encodeURIComponent(body)}`);
                             }}>✉️ Send to Outlook</button>
@@ -2693,6 +2678,7 @@ ${n.sessionData[k]}
       </div>
     </div>
     <CopyrightFooter/>
+    </>
   );
 }
 
